@@ -3,52 +3,93 @@ ECNS 460 Advanced Data Analytics Project: NBA Team Performance Dashboard
 
 # ECNS 460 Project: NBA Analytics Dashboard
 
-## Team Members
-Evan Donch  
+## Author
+Evan Donch
 
+---
 
 ## Topic
-I am building an interactive NBA analytics dashboard that allows users to explore how team statistics relate to winning.
+This project focuses on NBA team performance analytics. The goal is to explore how different team statistics and financial factors relate to winning in the NBA and to create a tool that allows users to interactively analyze team performance.
+
+---
 
 ## Product Plan
-My project will produce an interactive web dashboard using R Shiny. The dashboard will allow users to explore NBA team performance data and visualize relationships between statistics and wins.
 
-Users will be able to:
-- select NBA seasons
-- compare teams
-- explore relationships between statistics and win percentage
+### Goal
+The goal of this project is to build an interactive NBA analytics dashboard that allows users to explore relationships between team statistics, team payroll, and winning.
 
-## Intended Audience
-- NBA fans
-- sports analysts
-- students interested in basketball analytics
+### Intended Audience
+This dashboard is intended for:
+
+- NBA fans  
+- Sports analysts  
+- Students interested in basketball analytics  
+
+### Product Description
+The final product will be an interactive web dashboard built using **R Shiny**.
+
+The dashboard will allow users to:
+
+- Select an NBA season  
+- Choose teams to compare  
+- Visualize how team statistics and payroll relate to winning  
+- Explore trends across the league over time  
+
+Example visualizations may include:
+
+- Win percentage vs offensive rating  
+- Three-point attempts vs winning  
+- Win percentage vs team payroll  
+
+---
 
 ## Challenge
-My challenge will be learning how to build a Shiny web application, which allows us to create interactive dashboards using R.
+The primary challenge for this project will be learning how to build an interactive Shiny web application, which is a new tool for me.
+
+This will involve learning how to:
+
+- Build user interface (UI) layouts  
+- Create reactive plots and visualizations  
+- Connect user inputs to dynamic outputs  
+- Deploy an interactive data product  
+
+---
 
 ## Datasets
 
 ### Dataset 1: NBA Team Statistics
-Source: Basketball Reference
+**Source:** Basketball Reference  
+https://www.basketball-reference.com/
 
-Contains team statistics such as:
-- wins
-- losses
-- offensive rating
-- defensive rating
-- shooting percentages
+This dataset contains NBA team performance statistics such as:
 
-Coverage: NBA teams across multiple seasons.
+- Team  
+- Season  
+- Wins  
+- Losses  
+- Offensive rating  
+- Defensive rating  
+- Rebounds  
+- Turnovers  
+- Shooting percentages  
+
+**Timespan:** Multiple NBA seasons  
+**Coverage:** All NBA teams
+
+---
 
 ### Dataset 2: NBA Team Payroll
-Source: Spotrac
+**Source:** HoopsHype  
+https://hoopshype.com/salaries/teams/
 
-Contains:
-- team payroll
-- player salary totals
-- salary cap information
+This dataset contains financial information about NBA teams including:
 
-Coverage: NBA teams across multiple seasons.
+- Team payroll totals by season
+
+**Timespan:** Multiple NBA seasons with yearly payroll totals  
+**Coverage:** All NBA teams
+
+---
 
 ## Relationship Between Datasets
-Both datasets include team and season variables, allowing them to be merged into a single dataset where each observation represents a team-season.
+Both datasets contain the variables **team** and **season**, which allows them to be merged into a single dataset. After merging, each observation will represent a **team-season**, allowing users to explore how team performance statistics and payroll relate to winning.
