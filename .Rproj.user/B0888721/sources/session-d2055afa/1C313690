@@ -1,0 +1,26 @@
+{
+    "id": "1C313690",
+    "path": "~/Downloads/ecns460-nba-analytics-dashboard-main/scripts/01_data_cleaning.R",
+    "project_path": "scripts/01_data_cleaning.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1775589986865.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "7,28",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1775594563,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1775594563174,
+    "read_only": false,
+    "read_only_alternatives": []
+}
