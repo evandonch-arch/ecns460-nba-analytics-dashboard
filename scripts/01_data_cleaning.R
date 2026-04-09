@@ -19,7 +19,7 @@ stats_folder = "data/raw/NBA Team stats"
 
 stat_files = list.files(
   path = stats_folder,
-  pattern = "\\.csv$",
+  pattern = "^\\d{4}-\\d{2}_stats\\.csv$",
   full.names = TRUE
 )
 
