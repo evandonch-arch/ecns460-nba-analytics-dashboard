@@ -3,7 +3,7 @@
     "path": "~/Downloads/ecns460-nba-analytics-dashboard-main/output/writeup/stage2_writeup.Rmd",
     "project_path": "output/writeup/stage2_writeup.Rmd",
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "4076664796",
     "contents": "",
     "dirty": false,
     "created": 1775678695078.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "18,0",
-        "scrollLine": "12"
+        "cursorPosition": "74,0",
+        "scrollLine": "61"
     },
     "folds": "",
-    "lastKnownWriteTime": 1775679971,
+    "lastKnownWriteTime": 1775681403,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1775679971983,
+    "last_content_update": 1775681403079,
     "read_only": false,
     "read_only_alternatives": []
 }
