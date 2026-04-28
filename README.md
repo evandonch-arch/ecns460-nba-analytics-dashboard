@@ -93,3 +93,45 @@ This dataset contains financial information about NBA teams including:
 
 ## Relationship Between Datasets
 Both datasets contain the variables **team** and **season**, which allows them to be merged into a single dataset. After merging, each observation will represent a **team-season**, allowing users to explore how team performance statistics and payroll relate to winning.
+
+---
+
+## How to Run the App
+
+### Requirements
+- [R](https://cran.r-project.org/) (version 4.0 or higher)
+- [RStudio](https://posit.co/download/rstudio-desktop/)
+
+### Steps
+
+**1. Clone or download the repository**
+
+```
+git clone https://github.com/evandonch-arch/ecns460-nba-analytics-dashboard.git
+```
+
+Or click **Code > Download ZIP** on GitHub and unzip it.
+
+**2. Install the required packages**
+
+Open RStudio and run:
+
+```r
+install.packages(c("shiny", "ggplot2", "dplyr", "scales"))
+```
+
+**3. Open the project**
+
+Double-click `ecns460-nba-analytics-dashboard-main.Rproj` to open the project in RStudio. This step is important — it sets the working directory correctly so the data loads properly.
+
+**4. Run the app**
+
+Open `app.R` and click the **Run App** button in the top right of the RStudio editor, or run this in the console:
+
+```r
+shiny::runApp()
+```
+
+The dashboard will open in your browser.
+
+> **Note:** Always open the project via the `.Rproj` file before running the app. Opening `app.R` directly without loading the project first will cause a data loading error.
