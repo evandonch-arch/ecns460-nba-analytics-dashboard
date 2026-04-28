@@ -1,0 +1,135 @@
+---
+title: "NBA Team Analytics Dashboard"
+subtitle: "ECNS 460: Stage 3 Product"
+author: "Evan Donch"
+date: "April 2025"
+output:
+  html_document:
+    theme: flatly
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(ggplot2)
+library(dplyr)
+library(scales)
+
+nba = read.csv("../../data/clean/nba_data.csv", stringsAsFactors = FALSE)
+nba$payroll_M <- nba$payroll / 1e6
+```
+
+---
+
+# Goal and Intended Audience
+
+The goal of this project was to build an interactive web dashboard that lets users explore NBA team performance and payroll data across ten seasons (2015-2024). Rather than presenting a fixed set of charts, I wanted to give users the ability to ask their own questions by choosing which teams to focus on, which statistics to compare, and which seasons to include, and have the dashboard respond in real time.
+
+The intended audience is anyone with an interest in basketball analytics: fans who want to compare their favorite teams, analysts looking for efficiency trends, or just curious people who want to understand how payroll relates to winning. I specifically designed the tool to be approachable for someone who has never seen advanced stats before, with plain-English labels on every dropdown and a caption on every chart crediting the data source.
+
+This kind of interactive product fills a gap that static visualizations can't. A fixed chart can only show one comparison at a time, but a dashboard lets the user drive the analysis themselves.
+
+---
+
+# Why I Chose This Approach
+
+For Stage 3 I chose Option B (Product) and built an R Shiny app. Shiny was one of the suggested challenges in the project description and it was completely new to me since we didn't cover it in any of the lectures. I chose it because it felt like a natural fit for what I wanted to do: the data I collected in Stage 2 covers 30 teams across 10 seasons, and there are many different ways to look at it. A static writeup with a handful of fixed plots can only scratch the surface. An interactive dashboard lets the user explore combinations I never would have thought to plot myself.
+
+Learning Shiny also pushed me to think differently about code structure. In a regular R script everything runs top to bottom once. In Shiny you have to think about what runs when, specifically which pieces of code should re-execute every time the user changes an input and which pieces should only run once at startup. Understanding reactive expressions was probably the biggest learning curve, but once it clicked, it made the rest of the app much easier to build.
+
+---
+
+# Data
+
+The dashboard uses the same cleaned dataset I built in Stage 2. It combines two sources:
+
+- **Basketball Reference** (https://www.basketball-reference.com): team-level statistics for all 30 NBA teams across the 2014-15 through 2023-24 seasons. This includes wins, losses, offensive rating, defensive rating, pace, three-point attempt rate, and true shooting percentage.
+
+- **HoopsHype** (https://hoopshype.com/salaries/teams/): total team payroll for each season. Payroll is reported in raw dollars; I converted it to millions in the app to make it more readable on plots.
+
+After cleaning and merging in Stage 2, the dataset has 300 rows, one per team per season, and 17 variables. I load the cleaned CSV directly in the app so that none of the data wrangling code needs to run again inside Shiny.
+
+---
+
+# Dashboard Features and Design Choices
+
+The app has six tabs, each designed to answer a different kind of question. All tabs share a sidebar with a season range slider and a team selection dropdown, so filters apply across the whole app without the user having to set them repeatedly.
+
+## Top Teams
+
+This tab shows a horizontal bar chart of the top N teams ranked by any statistic the user selects. The user can control both the metric (win percentage, payroll, offensive rating, etc.) and how many teams appear (5 to 30). Teams that are highlighted in the sidebar are shown in blue; others are grayed out so the comparison is easy to see.
+
+I chose a horizontal bar chart because team names are long and they fit much better on the y-axis than the x-axis. I also added value labels at the end of each bar so the user doesn't have to read off the axis. This tab was directly motivated by feedback from my peer reviewer, who suggested showing top teams by name with financial factors included.
+
+## Compare Teams
+
+This tab lets users pick specific teams from the sidebar and compare them head to head, either as a line chart over time or as a bar chart of season averages. The line chart is useful for seeing how teams have changed across seasons; the bar chart is better for a quick ranking.
+
+I used `scale_color_viridis_d()` with the "turbo" palette for team colors because it gives clearly distinct colors even when many teams are selected, which is important when 10 or more lines appear on the same plot.
+
+## Scatter Explorer
+
+This is the most flexible tab. The user picks any two variables for the x and y axes and gets a scatter plot with one point per team-season. An optional regression line shows the overall trend, and an optional labeling feature identifies specific points by team abbreviation and year.
+
+When specific teams are highlighted, all of their points are labeled. When no teams are selected (showing all 300 observations), I only label the most extreme outlier points. I calculated this using Euclidean distance from the center of the plot, which keeps the chart from getting too cluttered.
+
+## Efficiency Dashboard
+
+This tab shows a fixed 2×2 grid: offensive rating, defensive rating, true shooting percentage, and three-point attempt rate, all plotted against winning percentage. Each panel uses a different color scheme to make them visually distinct. I added this tab based on peer review feedback that suggested grouping the relationship plots together rather than showing them one at a time. Having all four side by side makes it easy to compare the strength of each relationship at a glance.
+
+## Team Profile
+
+This tab lets the user pick a single team and select which statistics to display. It generates one line chart per selected statistic, arranged in a 2-column grid. Each chart shows the team's value as a solid blue line and the league average as a dashed gray line, so it's easy to see whether the team was above or below average in any given season.
+
+Building this tab required learning how to generate Shiny UI components dynamically inside the server using `renderUI()` and `uiOutput()`. Because the number of plots depends on how many statistics the user selects, I couldn't hard-code the layout in the UI, so I had to build it programmatically using `lapply()` inside the server.
+
+## League Trends
+
+The final tab tracks any statistic over all ten seasons for the league as a whole. The solid line shows the league average and the shaded ribbon shows the full range from the lowest to the highest team in each season, built with `geom_ribbon()`. This makes it easy to see not just where the average is going but also whether the spread between teams is widening or narrowing.
+
+---
+
+# Methods and Technical Details
+
+## Shiny Structure
+
+A Shiny app has two main parts: the UI and the server. The UI defines what the user sees, including the layout, labels, input widgets, and placeholders for plots. The server contains all the R code that actually runs when inputs change. I kept these clearly separated in `app.R` and used comments to mark each section.
+
+The most important concept in Shiny is **reactivity**. I used `reactive()` to create a filtered version of the dataset that automatically updates whenever the season slider changes. Every plot that uses this filtered data will also update automatically, so I don't have to write any refresh logic myself. Similarly, `observeEvent()` handles the Select All and Clear buttons without me having to manage state manually.
+
+## Code Reuse
+
+Rather than writing nearly identical ggplot code four times for the Efficiency Dashboard, I wrote a helper function called `eff_scatter()` that takes the variable name, title, and color arguments and returns the finished plot. This is a pattern we covered in the Programming lecture, specifically writing a function when you're doing the same thing multiple times with slightly different inputs.
+
+I also wrote two small utility functions, `var_label()` and `axis_formatter()`, that handle the mapping between internal column names and human-readable labels, and between variable types and the right scale formatting. Keeping this logic in one place means I only have to update it once if anything changes.
+
+## Visualization Principles
+
+Throughout the app I tried to follow the visualization principles from class:
+
+- Every plot has a title, subtitle, axis labels, and a caption with the data source.
+- I used a consistent custom theme (`theme_nba()`) based on `theme_minimal()` so all plots look like they belong together.
+- I chose color palettes that are meaningful, with blue for highlighted teams vs. gray for background teams, different colors for different efficiency metrics, viridis for multi-team comparisons.
+- I avoided unnecessary clutter like minor gridlines and redundant legends.
+
+---
+
+# Challenge: Learning Shiny
+
+Shiny was my challenge for this project. It is not covered in the course lectures and required significant self-teaching. I worked through the official Shiny documentation and tutorials at https://shiny.posit.co/r/getstarted/ to understand the basic structure, then built the app incrementally, adding one tab at a time and testing it after each addition.
+
+The biggest conceptual hurdle was understanding **reactive programming** , specifically why Shiny requires you to wrap things in `reactive()`, `renderPlot()`, and `observe()` rather than just writing regular R code. Once I understood that Shiny needs to track dependencies between inputs and outputs to know what to re-run when something changes, the rest of the framework made a lot more sense.
+
+The most technically challenging piece was the Team Profile tab, where the number of plots is determined by the user at runtime. This required using `renderUI()` to build the plot layout dynamically inside the server, and using `local()` inside a for loop to avoid a variable scoping bug where all plots would otherwise end up showing the last variable in the list rather than their own. This was a direct application of the closures and scoping concepts from the Programming lecture.
+
+---
+
+# Conclusion
+
+The finished dashboard gives users a flexible tool to explore NBA team data in ways that a static writeup cannot. The six tabs cover a range of question types including ranking, comparison over time, scatter plots, grouped efficiency views, individual team profiles, and league-wide trends, and the shared sidebar filters make it easy to focus on specific teams or time periods without resetting anything.
+
+If I were to extend this project, I would add player-level data so users could see how roster composition relates to team performance, and I would deploy the app to shinyapps.io so it could be accessed from a browser without needing R installed.
+
+---
+
+*Data sources: Basketball Reference (https://www.basketball-reference.com) and HoopsHype (https://hoopshype.com/salaries/teams/). All data covers the 2014-15 through 2023-24 NBA seasons.*
