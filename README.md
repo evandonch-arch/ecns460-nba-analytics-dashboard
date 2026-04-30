@@ -126,12 +126,12 @@ Double-click `ecns460-nba-analytics-dashboard-main.Rproj` to open the project in
 
 **4. Run the app**
 
-Open `app.R` and click the **Run App** button in the top right of the RStudio editor, or run this in the console:
+Open `scripts/NBA_App.R` and click the **Run App** button in the top right of the RStudio editor, or run this in the console:
 
 ```r
-shiny::runApp()
+shiny::runApp("scripts/NBA_App.R")
 ```
 
 The dashboard will open in your browser.
 
-> **Note:** Always open the project via the `.Rproj` file before running the app. Opening `app.R` directly without loading the project first will cause a data loading error.
+> **Note:** Always open the project via the `.Rproj` file before running the app. Opening `NBA_App.R` directly without loading the project first will cause a data loading error.
