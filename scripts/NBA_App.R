@@ -164,7 +164,7 @@ server = function(input, output, session) {
       #average the selected stat by team and take the top 10
       df = dat() |>
         group_by(team) |>
-        summarise(val = mean(.data[[input$top_metric]], na.rm = TRUE), groups = "drop") |>
+        summarise(val = mean(.data[[input$top_metric]], na.rm = TRUE), .groups = "drop") |>
         arrange(desc(val)) |>
         slice_head(n = 10)
       
