@@ -132,7 +132,7 @@ I think the dashboard ended up being a pretty useful tool for exploring the data
 
 # AI Disclosure
 
-I used Claude (Anthropic) as a learning tool while building the Shiny dashboard. Since Shiny wasn't covered in any of the lectures, I used it kind of like a tutor to understand how the framework works. Claude walked me through the UI/server structure, explained how reactive expressions work, and helped me understand how to connect inputs to plots. I then wrote the app myself based on that guidance. Claude also helped me work through specific problems I ran into, like the scoping issue inside the for loop in the Team Profile tab.
+I used Claude (Anthropic) as a learning tool while building the Shiny dashboard. Since Shiny wasn't covered in any of the lectures I used it like a tutor to learn the framework from scratch. Claude walked me through the concepts step by step, starting with the basic UI/server structure, then how reactive expressions work, then how to connect inputs to plots. I wrote all the code myself as we went, building one tab at a time and testing each piece before moving on. Claude also helped me debug errors I ran into along the way, like a typo in a variable name and a missing closing bracket.
 
 ---
 
